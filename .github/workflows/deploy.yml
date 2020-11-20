@@ -1,0 +1,24 @@
+name: Skynet WASM Payload
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions-rs/cargo@v1
+      with:
+        command: install
+        args: --force cargo-web
+    - uses: actions-rs/cargo@v1
+      with:
+        command: web
+        args: deploy
+    - uses: kwypchlo/deploy-to-skynet-action@main
+      with:
+        upload-dir: ./target/deploy
+        github-token: ${{ secrets.GITHUB_TOKEN }}
